@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-playground
+playground/public/pdfjs
+playground/public/sample-resume.pdf
+.DS_Store
+*.log
+.env

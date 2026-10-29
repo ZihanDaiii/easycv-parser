@@ -1,0 +1,60 @@
+{
+  "name": "easycv-parser",
+  "version": "0.1.0",
+  "description": "把 PDF / Word / HTML 简历还原成结构化、带原稿样式的数据（浏览器端，纯前端）",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "keywords": [
+    "resume",
+    "cv",
+    "parser",
+    "pdf",
+    "docx",
+    "简历解析",
+    "layout analysis"
+  ],
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./render": {
+      "types": "./dist/types/render/index.d.ts",
+      "import": "./dist/render.js"
+    }
+  },
+  "scripts": {
+    "assets": "node scripts/copy-pdfjs-assets.mjs",
+    "dev": "npm run assets && vite --config vite.playground.config.ts",
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "build:playground": "npm run assets && vite build --config vite.playground.config.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "peerDependencies": {
+    "pdfjs-dist": "^4.10.38",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "pdfjs-dist": "4.10.38",
+    "puppeteer-core": "^23.11.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}

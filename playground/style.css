@@ -1,0 +1,23 @@
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; color: #1d2129; background: #f4f5f7; }
+.app { max-width: 1480px; margin: 0 auto; padding: 16px; }
+.top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.top b { font-size: 18px; }
+.top span { color: #6b7280; }
+.top a { margin-left: auto; color: #2f5bd3; text-decoration: none; }
+.drop { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; padding: 28px 16px; border: 2px dashed #c9cdd4; border-radius: 12px; background: #fff; color: #4b5563; cursor: pointer; text-align: center; }
+.drop.over { border-color: #2f5bd3; background: #f0f4ff; }
+button { font: inherit; padding: 6px 14px; border-radius: 8px; border: 1px solid #c9cdd4; background: #fff; cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
+.err { color: #c0392b; }
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin: 14px 0 8px; color: #4b5563; }
+.tabs button + button { margin-left: 6px; }
+.tabs .on { background: #1d2129; color: #fff; border-color: #1d2129; }
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cmp section { min-width: 0; }
+.cmp h3 { margin: 6px 0 8px; font-size: 13px; color: #6b7280; font-weight: 500; }
+.orig canvas { display: block; width: 100%; height: auto; margin-bottom: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.08); background: #fff; }
+.fit { overflow: hidden; }
+.paper .rs { box-shadow: 0 2px 12px rgba(0,0,0,.08); background: #fff; }
+.json { margin: 0; max-height: 80vh; overflow: auto; padding: 12px; background: #fff; border-radius: 8px; font-size: 12px; }
+@media (max-width: 900px) { .cmp { grid-template-columns: 1fr; } }

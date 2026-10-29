@@ -1,0 +1,30 @@
+name: 识别出错
+description: 某份简历的结构或样式没有识别对
+labels: [parsing]
+body:
+  - type: markdown
+    attributes:
+      value: "⚠️ **请不要上传含真实个人信息的简历。** 把姓名、电话、邮箱等替换成虚构内容（保留版式）后再上传，或只附打码截图。"
+  - type: dropdown
+    id: format
+    attributes:
+      label: 文件格式
+      options: [PDF, DOCX, HTML]
+    validations:
+      required: true
+  - type: input
+    id: tool
+    attributes:
+      label: 简历是用什么做的
+      placeholder: Word / WPS / 某简历网站 / LaTeX ……
+  - type: textarea
+    id: what
+    attributes:
+      label: 哪里识别错了，期望是什么
+    validations:
+      required: true
+  - type: textarea
+    id: shot
+    attributes:
+      label: 对比截图 / 虚构样例文件
+      description: 在演示页里截“原稿 / 解析后重新渲染”的对比图
