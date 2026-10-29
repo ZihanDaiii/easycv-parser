@@ -1,55 +1,89 @@
 # easycv-parser
 
-把 PDF / Word（.docx）/ HTML 简历还原成**结构化数据**，同时还原原稿的**版式和样式**。纯前端，文件不出浏览器。
+### 把简历还原成数据，也还原成原来的样子。
 
-[English](#english) · [效果](#效果) · [快速开始](#快速开始) · [API](#api) · [原理](docs/how-it-works.md) · [数据格式](docs/data-model.md)
+[![easycv-parser：把 PDF / Word / HTML 简历解析成结构化数据，并按原样式重新渲染](.github/assets/readme-banner.jpg)](#快速开始)
 
-> 本项目是简历编辑产品「简单简历 EasyCV」的解析引擎开源版。
+<p align="center">
+  <a href="#快速开始">快速开始</a> ·
+  <a href="docs/how-it-works.md">工作原理</a> ·
+  <a href="docs/data-model.md">数据格式</a> ·
+  <a href="README.en.md">English</a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-blue"></a>
+  <a href="https://github.com/ZihanDaiii/easycv-parser/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/ZihanDaiii/easycv-parser/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178c6">
+  <img alt="Runs in browser" src="https://img.shields.io/badge/runs%20in-browser-2f5bd3">
+</p>
+
+easycv-parser 是一个开源的简历解析引擎。它读取 PDF、Word（.docx）或 HTML 格式的简历，输出一份结构化的数据：页眉、模块、经历、要点、表格，以及原稿的字体、配色和版式。
+
+和只抽取文字的解析器不同，它同时还原**内容**和**样子**：解析结果可以按原稿的样式重新渲染出来，和原稿几乎一致。
+
+整个过程在浏览器里完成，文件不会离开用户的设备。它也是「简单简历 EasyCV」背后的解析引擎。
 
 ## 效果
 
-左边是原稿 PDF，右边是解析成结构化数据之后**重新渲染**出来的结果（示例简历中的人物、学校、公司均为虚构）：
+左边是原稿 PDF，右边是解析成结构化数据后重新渲染的结果。示例简历中的人物、学校和公司均为虚构。
 
 ![原稿与解析后重新渲染的对比](docs/images/compare.png)
 
-| 能识别的 | 说明 |
-|---|---|
-| 结构 | 页眉（姓名、联系方式、照片）、模块（教育 / 实习 / 项目……）、经历（标题 + 右侧时间）、多级要点、表格 |
-| 版式 | 单栏 / 左右两栏、页眉位置、页边距、段落间距、缩进、对齐 |
-| 样式 | 中英文字体、字号、粗体 / 斜体、主题色、模块标题样式（色带、下划线、色块……）、背景色块、分隔线、列表符号 |
-| 图片 | 证件照、公司 Logo、图标等内嵌图形 |
-| 格式 | PDF（文字版）、Word .docx、HTML |
+## 设计理念
 
-不支持：扫描件 / 图片 PDF（需要先 OCR）、旧版 .doc。
+- **结构与样式同样重要**
+  - 简历的版式本身就是信息。字体、主题色、模块标题样式、两栏布局都会被识别并保留。
+  - 结构和样式分开存储：内容可以单独使用，样式也可以单独替换。
+
+- **不预设字段**
+  - 不把每段经历强行拆成“单位 / 职位 / 时间”。原稿怎么写就怎么还原：富文本段落，加上可选的右对齐部分。
+  - 任何写法的简历都能完整保留，不会因为对不上字段而丢内容。
+
+- **一条管线，多种格式**
+  - PDF、DOCX、HTML 先转成同一种中间表示，再走同一套版面分析和结构识别。改进一处，所有格式一起受益。
+
+- **本地优先**
+  - 没有服务端，不发起网络请求。简历是高度敏感的个人数据，应该留在用户自己的设备上。
+
+## 它能做什么
+
+- **识别结构。** 页眉（姓名、联系方式、证件照）、模块标题、经历标题与右侧时间、多级要点、表格。
+- **还原版式。** 单栏与左右两栏、页边距、段落间距、缩进、对齐、页眉位置。
+- **还原样式。** 中西文字体、字号、粗斜体、主题色、模块标题样式（色带、下划线、色块……）、背景色块、分隔线、列表符号。
+- **保留图片。** 证件照、公司 Logo 和矢量图标。
+- **重新渲染。** 自带一个只读的 React 组件，按原稿样式画出解析结果。
+
+中文简历是重点优化对象，英文简历同样可用。扫描件和图片 PDF 需要先做 OCR。
 
 ## 快速开始
 
-### 在线演示（本地运行）
+在本地运行演示页：
 
 ```bash
 git clone https://github.com/ZihanDaiii/easycv-parser.git
 cd easycv-parser
 npm install
-npm run dev        # http://localhost:5190 ，点「用示例简历试试」或拖入自己的简历
+npm run dev
 ```
 
-### 在项目里使用
+打开 <http://localhost:5190>，点击「用示例简历试试」，或者拖入你自己的简历。
 
-> npm 包即将发布，目前可以直接从源码构建：`npm run build` 生成 `dist/`。
+### 在项目中使用
 
 ```ts
 import { configurePdfjs, parseResume } from 'easycv-parser';
-import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'; // Vite 写法；其他打包工具按各自方式拿到 worker 地址
+import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-// 中文 PDF 需要 pdf.js 的字符映射表（cmaps），把 node_modules/pdfjs-dist/cmaps 放到静态目录下
+// 中文 PDF 需要 pdf.js 的字符映射表：把 node_modules/pdfjs-dist/cmaps 放到静态目录
 configurePdfjs({ workerSrc: workerUrl, cMapUrl: '/pdfjs/cmaps/', standardFontDataUrl: '/pdfjs/standard_fonts/' });
 
-const { resume, stats } = await parseResume(file); // file 来自 <input type="file">
-console.log(stats);          // { sections: 4, entries: 8, lines: 26 }
-console.log(resume.body);    // 模块 → 经历 → 段落 的树
+const { resume, stats } = await parseResume(file);
+// stats  → { sections: 4, entries: 8, lines: 26 }
+// resume → 模块 → 经历 → 段落的树，以及样式参数
 ```
 
-按原样式渲染（React，可选）：
+按原样式渲染：
 
 ```tsx
 import { ResumeView, RESUME_CSS } from 'easycv-parser/render';
@@ -60,74 +94,58 @@ import { ResumeView, RESUME_CSS } from 'easycv-parser/render';
 </>
 ```
 
-## API
-
-| 函数 | 说明 |
+| API | 说明 |
 |---|---|
-| `parseResume(input, { kind? })` | 一步到位：`File` / `Blob` / `ArrayBuffer` → `{ resume, stats, extracted }`。`kind` 为 `'pdf' \| 'docx' \| 'html'`，传 `File` 时可省略 |
-| `extract(data, kind)` | 只做第一步：读出文字片段、字体、颜色、色块、线条、图片（`Extracted`） |
-| `buildResume(extracted)` | 只做后两步：版面分析 + 结构识别 + 样式还原 |
-| `configurePdfjs({ workerSrc, cMapUrl, standardFontDataUrl })` | 设置 pdf.js 资源位置 |
-| `detectKind(name, mime)` | 按文件名 / MIME 判断格式 |
-| `ResumeView`、`RESUME_CSS`（`easycv-parser/render`） | 把 `resume` 按原稿样式渲染出来（只读） |
+| `parseResume(input, { kind? })` | `File` / `Blob` / `ArrayBuffer` → `{ resume, stats, extracted }` |
+| `extract(data, kind)` | 只读取原稿里的文字、色块、线条和图片 |
+| `buildResume(extracted)` | 版面分析、结构识别、样式还原 |
+| `configurePdfjs(options)` | 设置 pdf.js 的 worker 和资源路径 |
+| `ResumeView`、`RESUME_CSS` | 只读渲染组件（`easycv-parser/render`） |
 
-出错时抛出 `ParseError`，`code` 为 `unsupported`（格式不支持）或 `no_text`（没有文字层，多半是扫描件）。
+npm 包即将发布，目前可以用 `npm run build` 从源码构建。
 
-## 原理
+## 工作原理
 
-```
-原稿 ──▶ 提取（pdf.js 取字 + 页面位图分析颜色、色块、线条、符号、图片）
-     ──▶ 版面分析（分栏、行、段落、列表、对齐）
-     ──▶ 结构识别（页眉、模块标题、经历、时间、要点、表格）
-     ──▶ 样式还原（字体、字号、主题色、模块标题样式、边距）
+```text
+原稿 ──▶ 提取        文字、字体、颜色、色块、线条、列表符号、图片
+     ──▶ 版面分析    分栏、行、段落、列表、对齐、表格
+     ──▶ 结构识别    页眉、模块、经历、时间、要点
+     ──▶ 样式还原    字体、字号、主题色、标题样式、边距
      ──▶ Resume JSON
 ```
 
-详见 [docs/how-it-works.md](docs/how-it-works.md)，数据格式见 [docs/data-model.md](docs/data-model.md)。
+PDF 的文字和字体来自 pdf.js，颜色、色块和线条来自对页面位图的逐格分析；HTML 在隔离的 iframe 中排版后读取；DOCX 先转换成等效的 HTML。
 
-## 这个仓库包含什么、不包含什么
+详见 [工作原理](docs/how-it-works.md) 和 [数据格式](docs/data-model.md)。
 
-| 开源（本仓库） | 不在本仓库（属于「简单简历」产品） |
-|---|---|
-| PDF / Word / HTML 解析引擎 | 在线编辑器（拖拽排序、改样式、模板、适配页数……） |
-| 结构化数据格式（类型定义） | 导出 PDF / HTML |
-| 只读渲染组件 | 账号、云端保存、会员与支付 |
-| 演示页、示例简历、测试脚本 | AI 辅助识别（本地识别不完整时的兜底） |
+## 仓库结构
 
-想直接在网页上修改并导出简历，可以使用「简单简历 EasyCV」产品。
+```text
+src/parser/     # 提取（pdf / html / docx）、版面分析、结构识别与样式还原
+src/model/      # 数据类型
+src/render/     # 只读渲染组件
+playground/     # 演示页
+examples/       # 示例简历（内容均为虚构）
+docs/           # 原理与数据格式
+```
 
-## 隐私
-
-解析全部在浏览器里完成，本库不会发起任何网络请求（pdf.js 的 worker 和字符表除外，由你自己托管）。
-
-**提 Issue 时请不要上传含真实个人信息的简历**，用虚构内容复现问题即可，见 [CONTRIBUTING.md](CONTRIBUTING.md)。
-
-## 参与贡献
-
-欢迎提 Issue 和 PR，特别是：识别出错的简历版式（请用虚构内容复现）、新的模块标题写法、英文简历。见 [CONTRIBUTING.md](CONTRIBUTING.md)。第一次提 PR 时需要签署[贡献者许可协议（CLA）](CLA.md)，机器人会在 PR 里提示，回复一句话即可。
-
-## 许可证
-
-代码以 [GNU AGPL-3.0](LICENSE)（`AGPL-3.0-only`）开源：
-
-- 个人学习、研究、自己内部使用：随意使用和修改。
-- 把本项目（或改过的版本）集成进你的产品并**分发**，或者**作为线上服务提供给别人使用**：需要按 AGPL-3.0 把你的完整源代码同样开源。
-- 想闭源商用：可以向项目所有者申请**商业授权**，在 GitHub 上联系 [@ZihanDaiii](https://github.com/ZihanDaiii)。
-
-「简单简历」「EasyCV」名称和 Logo 不在授权范围内，见 [NOTICE](NOTICE)。
-
----
-
-## English
-
-**easycv-parser** turns PDF / Word (.docx) / HTML resumes into structured JSON **and** recovers the original layout and styling (fonts, colors, section-heading styles, two-column layouts, photos, tables). It runs entirely in the browser. It is the open-source parsing engine behind the EasyCV resume editor; the editor, export, accounts and AI fallback are not part of this repository.
+## 开发
 
 ```bash
-npm install && npm run dev   # open http://localhost:5190 and click the sample button
+npm run dev         # 演示页
+npm run typecheck
+npm run build       # 构建 dist/
+npm run smoke       # 冒烟测试：需要先运行 npm run dev，并安装 Chrome
 ```
 
-```ts
-const { resume, stats } = await parseResume(file);
-```
+提交 Issue 或测试样例时，请使用虚构内容，不要上传含真实个人信息的简历。
 
-Optimized for Chinese resumes, works with English ones. Licensed under AGPL-3.0-only (commercial licenses available from the project owner); contributions require signing the [CLA](CLA.md). The "EasyCV" name and logo are not covered by the license.
+## 安全
+
+请通过 GitHub 的 [Security Advisories](https://github.com/ZihanDaiii/easycv-parser/security/advisories/new) 私下报告漏洞，不要公开提 Issue。见 [SECURITY.md](SECURITY.md)。
+
+## 许可证与贡献
+
+本项目的原创代码以 [AGPL-3.0-only](LICENSE) 授权，第三方组件保留各自的许可证。
+
+贡献需要签署 [CLA](CLA.md)，见 [CONTRIBUTING.md](CONTRIBUTING.md)。

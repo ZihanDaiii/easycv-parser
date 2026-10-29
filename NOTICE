@@ -1,13 +1,10 @@
 easycv-parser
-Copyright (C) 2026 项目所有者（GitHub @ZihanDaiii）
+Copyright (C) 2026 ZihanDaiii and easycv-parser contributors
 
-本项目以 GNU Affero General Public License v3.0（AGPL-3.0-only）开源，见 LICENSE。
-如需在不满足 AGPL 条款的情况下使用（例如闭源商用、作为线上服务提供但不开源改动），
-可以向项目所有者申请商业授权。
+本项目的原创代码以 GNU Affero General Public License v3.0（AGPL-3.0-only）授权，见 LICENSE。
+第三方组件保留各自的许可证。
 
-商标说明：“简单简历”、“EasyCV” 名称及相关 Logo 是项目所有者的品牌标识，
-不在 AGPL-3.0 的授权范围内。基于本项目的衍生作品请勿使用上述名称或 Logo
-作为产品名称，或暗示与本项目存在官方关联。
+“简单简历”“EasyCV”名称及相关 Logo 不在上述许可证的授权范围内。
 
 第三方组件：
 - pdf.js（Apache License 2.0），Copyright Mozilla Foundation
